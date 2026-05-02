@@ -87,7 +87,7 @@ GROUP BY store_id
 HAVING AVG(amount) > 50000;
 
 -- -----------------------------------------------
--- DAY 6: Superstore Analysis 
+-- DAY 6: SUPERSTORE DATASET ANALYSIS
 -- -----------------------------------------------
 
 -- Q10: Top 5 categories by revenue
@@ -144,3 +144,72 @@ SELECT DISTINCT customer_name
 FROM orders
 WHERE ship_mode = 'First Class' 
   AND order_date BETWEEN '2016-01-01' AND '2016-12-31';
+
+-- Q18: Number of unique orders per Segment
+SELECT segment, COUNT(DISTINCT order_id) AS total_orders
+FROM orders
+GROUP BY segment
+ORDER BY total_orders DESC;
+
+-- Q19: High-profit Sub-Categories (profit > 5,000)
+SELECT sub_category, SUM(profit) AS total_profit
+FROM orders
+GROUP BY sub_category
+HAVING SUM(profit) > 5000
+ORDER BY total_profit DESC;
+
+-- Q20: Top 3 Cities in the West region by total sales
+SELECT city, SUM(sales) AS total_sales
+FROM orders
+WHERE region = 'West'
+GROUP BY city
+ORDER BY total_sales DESC
+LIMIT 3;
+
+-- Q21: Top 5 most profitable individual orders in 'Technology'
+SELECT order_id, SUM(profit) AS total_profit
+FROM orders
+WHERE category = 'Technology'
+GROUP BY order_id
+ORDER BY total_profit DESC
+LIMIT 5;
+
+-- Q22: Sub-categories with total sales exceeding 100,000
+SELECT sub_category, SUM(sales) AS total_sales
+FROM orders
+GROUP BY sub_category
+HAVING SUM(sales) > 100000
+ORDER BY total_sales DESC;
+
+-- Q23: Categories in the 'South' region with average profit over 50
+SELECT category, AVG(profit) AS avg_profit
+FROM orders
+WHERE region = 'South'
+GROUP BY category
+HAVING AVG(profit) > 50
+ORDER BY avg_profit DESC;
+
+-- Q24: Unprofitable cities with more than 10 orders (Total Profit < 0)
+SELECT city, COUNT(order_id) AS total_orders,
+             SUM(profit) AS total_profit, 
+             AVG(discount) AS avg_discount
+FROM orders
+GROUP BY city
+HAVING COUNT(order_id) > 10 AND SUM(profit) < 0
+ORDER BY total_orders DESC;
+
+-- Q25: Average sales of 'Phone' products by sub-category (Avg Sales > 500)
+SELECT sub_category, AVG(sales) AS avg_sales
+FROM orders
+WHERE product_name ILIKE '%Phone%'
+GROUP BY sub_category
+HAVING AVG(sales) > 500
+ORDER BY avg_sales DESC;
+
+-- Q26: Profitable states (Total Profit > 1000) for orders with discount <= 20%
+SELECT state, SUM(profit) AS total_profit
+FROM orders
+WHERE discount <= 0.2
+GROUP BY state
+HAVING SUM(profit) > 1000
+ORDER BY total_profit DESC;

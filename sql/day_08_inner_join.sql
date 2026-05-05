@@ -23,3 +23,13 @@ SELECT
 FROM orders AS o
 INNER JOIN returns AS r 
   ON o.order_id = r.order_id;
+
+SELECT 
+    o.order_id, 
+    o.product_name, 
+    o.profit, 
+    ROUND((o.profit / o.sales), 2) AS profitability
+FROM orders AS o
+INNER JOIN returns AS r 
+  ON o.order_id = r.order_id
+WHERE o.profit < 0;
